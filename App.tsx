@@ -109,6 +109,7 @@ const AIMemeGenerator = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
   const [selectedStyle, setSelectedStyle] = useState<'color' | 'bw'>('color');
+  const cachedRefImage = useRef<string | null>(null);
 
   const randomPrompts = [
     "LOL Guy accidentally sitting on a huge cactus and laughing while in pain",
@@ -122,26 +123,31 @@ const AIMemeGenerator = () => {
   ];
 
   const getBase64FromUrl = async (url: string): Promise<string | null> => {
+    if (cachedRefImage.current) return cachedRefImage.current;
     try {
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const response = await fetch(proxyUrl);
       if (!response.ok) throw new Error("Proxy fetch failed");
       const blob = await response.blob();
-      return new Promise((resolve) => {
+      const base64 = await new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
         reader.readAsDataURL(blob);
       });
+      cachedRefImage.current = base64;
+      return base64;
     } catch (e) {
       console.warn("CORS fetch error, attempting direct fetch", e);
       try {
         const directResp = await fetch(url);
         const blob = await directResp.blob();
-        return new Promise((resolve) => {
+        const base64 = await new Promise<string>((resolve) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
           reader.readAsDataURL(blob);
         });
+        cachedRefImage.current = base64;
+        return base64;
       } catch (inner) {
         console.error("All fetch methods failed for reference image", inner);
         return null;
@@ -211,7 +217,7 @@ const AIMemeGenerator = () => {
       if (!imagePartFound) throw new Error("No image in response");
 
     } catch (err) {
-      console.error(err);
+      console.error("Meme Generation Error:", err);
       setErrorStatus("ROFL! GENERATION FAILED! CHECK YOUR VITE_API_KEY!");
     } finally {
       setLoading(false);
