@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { PROJECT_NAME, TICKER, CONTRACT_ADDRESS, X_LINK, TELEGRAM_LINK, LOGO_URL, ABOUT_TEXT } from './constants';
@@ -121,7 +122,6 @@ const AIMemeGenerator = () => {
 
   const getBase64FromUrl = async (url: string): Promise<string | null> => {
     try {
-      // Proxy használata a CORS hibák elkerülésére kliens oldalon
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const response = await fetch(proxyUrl);
       if (!response.ok) throw new Error("Proxy fetch failed");
@@ -148,11 +148,10 @@ const AIMemeGenerator = () => {
     }
   };
 
-  const generateMeme = async (overridePrompt?: string) => {
+  const generateMeme = async (style: 'color' | 'bw', overridePrompt?: string) => {
     const finalPrompt = (overridePrompt || prompt).trim();
     if (!finalPrompt || loading) return;
     
-    // API Kulcs ellenőrzése
     const apiKey = process.env.API_KEY || (window as any).process?.env?.API_KEY;
     if (!apiKey) {
       setErrorStatus("API KEY MISSING! ADD VITE_API_KEY TO VERCEL!");
@@ -178,12 +177,16 @@ const AIMemeGenerator = () => {
         });
       }
 
-      const systemPrompt = `ACT AS AN MS PAINT ARTIST FROM 2010. 
+      const styleInstruction = style === 'color' 
+        ? "VISUAL STYLE: VIBRANT CARTOON, FULL COLOR, SATURATED, 2010s WEB ART STYLE, BOLD OUTLINES." 
+        : "VISUAL STYLE: CRUDE, SHAKY, MS PAINT DOODLE, BLACK AND WHITE ONLY, PLAIN WHITE BACKGROUND.";
+
+      const systemPrompt = `ACT AS AN ARTIST FROM 2010. 
       Reference the provided character head of 'LOL Guy'.
       MANDATORY: He has a distinct wide shouting/laughing mouth and oval eyes.
       SCENE: ${finalPrompt}. 
-      VISUAL STYLE: CRUDE, SHAKY, MS PAINT DOODLE, BLACK AND WHITE ONLY, PLAIN WHITE BACKGROUND. 
-      CHARACTER TRAIT: Give him an ABSURDLY RIPPED MUSCULAR BODY matching the crude sketch style.`;
+      ${styleInstruction}
+      CHARACTER TRAIT: Give him an ABSURDLY RIPPED MUSCULAR BODY matching the sketch style.`;
 
       parts.push({ text: systemPrompt });
 
@@ -263,22 +266,32 @@ const AIMemeGenerator = () => {
           onChange={(e) => setPrompt(e.target.value)}
           className="w-full p-4 md:p-8 border-4 border-black rounded-none text-xl md:text-3xl focus:outline-none focus:ring-8 md:focus:ring-12 focus:ring-green-400 transition-all min-h-[120px] md:min-h-[150px] marker-font"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <button 
-            onClick={() => generateMeme()}
-            disabled={loading}
-            className="bg-black text-white p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(34,197,94,1)] hover:bg-white hover:text-black transition-all active:translate-y-2"
-          >
-            {loading ? "PAINTING..." : "GENERATE MEME"}
-          </button>
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <button 
+              onClick={() => generateMeme('color')}
+              disabled={loading}
+              className="bg-black text-white p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(34,197,94,1)] hover:bg-white hover:text-black transition-all active:translate-y-2"
+            >
+              {loading ? "PAINTING..." : "COLOR CARTOON"}
+            </button>
+            <button 
+              onClick={() => generateMeme('bw')}
+              disabled={loading}
+              className="bg-white text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
+            >
+              {loading ? "PAINTING..." : "BLACK & WHITE"}
+            </button>
+          </div>
           <button 
             onClick={() => {
               const p = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
+              const style = Math.random() > 0.5 ? 'color' : 'bw';
               setPrompt(p);
-              generateMeme(p);
+              generateMeme(style, p);
             }}
             disabled={loading}
-            className="bg-green-500 text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
+            className="w-full bg-green-500 text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
           >
             RANDOM MEME
           </button>
