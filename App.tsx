@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { PROJECT_NAME, TICKER, CONTRACT_ADDRESS, X_LINK, TELEGRAM_LINK, LOGO_URL, ABOUT_TEXT } from './constants';
@@ -109,15 +108,17 @@ const AIMemeGenerator = () => {
   const [generatedImg, setGeneratedImg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
+  const [selectedStyle, setSelectedStyle] = useState<'color' | 'bw'>('color');
 
   const randomPrompts = [
-    "Flexing his huge muscular body at the gym with Solana weights",
-    "Ripped muscular body lifting a massive green candle above his head",
-    "On a surfboard made of $LOL coins showing off his muscular body and 8-pack abs",
-    "Running in terror from a giant red candle while having a huge muscular body",
-    "Dressed as an astronaut showing off a giant muscular body through the suit",
-    "Winning a bodybuilding competition with a massive muscular body against 1000 clones",
-    "Sitting on a mountain of cash showing off a giant muscular chest"
+    "LOL Guy accidentally sitting on a huge cactus and laughing while in pain",
+    "LOL Guy riding a giant rubber duck through a sea of gold Solana coins",
+    "LOL Guy trying to catch a flying green candle with a tiny butterfly net",
+    "LOL Guy eating a slice of pizza that is 10 times bigger than his entire body",
+    "LOL Guy wearing a clown wig and giant shoes while balancing on a tightrope",
+    "LOL Guy looking through a massive magnifying glass to find the $LOL ticker on a map",
+    "LOL Guy having a tea party with a bunch of confused looking stick figures",
+    "LOL Guy accidentally tripping over a red candle and doing an epic faceplant"
   ];
 
   const getBase64FromUrl = async (url: string): Promise<string | null> => {
@@ -186,7 +187,7 @@ const AIMemeGenerator = () => {
       MANDATORY: He has a distinct wide shouting/laughing mouth and oval eyes.
       SCENE: ${finalPrompt}. 
       ${styleInstruction}
-      CHARACTER TRAIT: Give him an ABSURDLY RIPPED MUSCULAR BODY matching the sketch style.`;
+      CHARACTER TRAIT: Focus on humorous expressions and funny body language matching the MS Paint sketch style.`;
 
       parts.push({ text: systemPrompt });
 
@@ -221,7 +222,7 @@ const AIMemeGenerator = () => {
     if (!generatedImg) return;
     const link = document.createElement('a');
     link.href = generatedImg;
-    link.download = `muscular-lol-guy-${Date.now()}.png`;
+    link.download = `lol-guy-meme-${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -230,7 +231,7 @@ const AIMemeGenerator = () => {
   return (
     <div id="lab" className="sketch-border p-6 md:p-10 bg-white space-y-6 md:space-y-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all scroll-mt-32">
       <h2 className="text-4xl md:text-6xl marker-font text-center transform -rotate-1 border-b-4 border-black pb-4 uppercase">LOL MEME LAB</h2>
-      <p className="text-center italic opacity-70 text-lg md:text-2xl px-4">The OG head. A muscular body. MS Paint style.</p>
+      <p className="text-center italic opacity-70 text-lg md:text-2xl px-4">The OG head. Pure ROFL moments. MS Paint style.</p>
       
       <div className="relative aspect-square w-full max-w-[500px] mx-auto bg-gray-50 sketch-border overflow-hidden flex flex-col items-center justify-center group">
         {generatedImg ? (
@@ -252,7 +253,7 @@ const AIMemeGenerator = () => {
             ) : (
               <div className="space-y-4 md:space-y-6 opacity-40 group-hover:opacity-100 transition-opacity">
                 <img src={LOGO_URL} className="w-24 h-24 md:w-40 md:h-40 mx-auto" alt="ref" />
-                <p className="marker-font text-2xl md:text-3xl px-2 uppercase">Ready to Flex?</p>
+                <p className="marker-font text-2xl md:text-3xl px-2 uppercase">Ready for ROFL?</p>
               </div>
             )}
           </div>
@@ -261,7 +262,7 @@ const AIMemeGenerator = () => {
 
       <div className="space-y-4 md:space-y-6">
         <textarea 
-          placeholder="Where should MUSCULAR LOL Guy go next?" 
+          placeholder="Where should LOL Guy go next?" 
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           className="w-full p-4 md:p-8 border-4 border-black rounded-none text-xl md:text-3xl focus:outline-none focus:ring-8 md:focus:ring-12 focus:ring-green-400 transition-all min-h-[120px] md:min-h-[150px] marker-font"
@@ -269,32 +270,38 @@ const AIMemeGenerator = () => {
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <button 
-              onClick={() => generateMeme('color')}
-              disabled={loading}
-              className="bg-black text-white p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(34,197,94,1)] hover:bg-white hover:text-black transition-all active:translate-y-2"
+              onClick={() => setSelectedStyle('color')}
+              className={`${selectedStyle === 'color' ? 'bg-green-500' : 'bg-white'} text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:opacity-80 transition-all`}
             >
-              {loading ? "PAINTING..." : "COLOR CARTOON"}
+              COLOR CARTOON
             </button>
             <button 
-              onClick={() => generateMeme('bw')}
-              disabled={loading}
-              className="bg-white text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
+              onClick={() => setSelectedStyle('bw')}
+              className={`${selectedStyle === 'bw' ? 'bg-green-500' : 'bg-white'} text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:opacity-80 transition-all`}
             >
-              {loading ? "PAINTING..." : "BLACK & WHITE"}
+              BLACK & WHITE
             </button>
           </div>
-          <button 
-            onClick={() => {
-              const p = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
-              const style = Math.random() > 0.5 ? 'color' : 'bw';
-              setPrompt(p);
-              generateMeme(style, p);
-            }}
-            disabled={loading}
-            className="w-full bg-green-500 text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
-          >
-            RANDOM MEME
-          </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <button 
+              onClick={() => generateMeme(selectedStyle)}
+              disabled={loading}
+              className="bg-black text-white p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(34,197,94,1)] hover:bg-green-500 hover:text-black transition-all active:translate-y-2"
+            >
+              {loading ? "PAINTING..." : "GENERATE MEME"}
+            </button>
+            <button 
+              onClick={() => {
+                const p = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
+                setPrompt(p);
+                generateMeme(selectedStyle, p);
+              }}
+              disabled={loading}
+              className="bg-green-500 text-black p-4 md:p-6 marker-font text-2xl md:text-3xl sketch-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all active:translate-y-2"
+            >
+              RANDOM MEME
+            </button>
+          </div>
         </div>
       </div>
     </div>
