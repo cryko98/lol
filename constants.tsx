@@ -1,15 +1,21 @@
 
-export const PROJECT_NAME = "LOL Guy";
-export const TICKER = "$LOL";
-export const CONTRACT_ADDRESS = "53Xy4g1RJnGR6saaJRDNoo1rYTGZ3W5U321EDdSa5BGD";
-export const X_LINK = "https://x.com/lolguy_lol_?s=21&t=JPystWPAkAGSZBSlOCCUhA";
-export const TELEGRAM_LINK = "https://t.me/lolguy_lolol";
-export const LOGO_URL = "https://pbs.twimg.com/profile_images/1968362464698839040/40F6gXh__400x400.jpg";
+export const PROJECT_NAME = "Yarl";
+export const TICKER = "$yarl";
+export const CONTRACT_ADDRESS = "4SC9u3dZuawTEyq6EvWnS1NWWrQ1pVpjHGrVoAA2bonk";
+export const X_LINK = "https://x.com/"; // Placeholder as not provided, keeping generic or empty
+export const TELEGRAM_LINK = "https://t.me/"; // Placeholder
+export const LOGO_URL = "https://yarl.fun/assets/image_1754937653085-Dlh4_m6V.png";
 
-export const ABOUT_TEXT = `Meet LOLGuy, the legendary meme you’ve seen all over the internet! The ultimate symbol of laughter, fun, and trolling culture. 
+export const ABOUT_TEXT = `Yarl is by heart a rebellion. Born in Crude MS Paint and not by high end corporate designers. Yarl have been trough both good and bad times. They have made him into what he is today. The yellow scripture includes not only the 10 commandments of Yarl but also a philosophy of the way a life should be lived.
 
-An email sent to Know Your Meme suggests that the image was initially posted to the /b/ (random) board on 4chan on June 14, 2010. 
+"The cult of anonymous yarlers" stand together strong, but every desciple unique in its own way. The Yellow Scripture is not mere prophecy ; it is a mirror of the soul.
 
-"Hello there, I think it’s time to straighten out some things about the LOL Guy. About MY LOL Guy. That’s right, I draw this ugly piece of crap in MS Paint on the 14. June 2010 and I first posted it on /b/ in a “This is now a meme” -Thread."
+YARL teaches that morality is our compass, not our chain.
+We walk not in blind devotion, but in awareness — guided by the golden code that binds chaos into order.
+Beyond prophecy lies purpose.
 
-Join the LOL cult on Solana and LOL your way to the bank. We have CTOd the OG LOLGuy on Solana. As you know, the original always wins! There will be thousands of vamps which will simply bring more attention to us!`;
+The followers of YARL live by the Yellow Scripture, a moral code forged in the age of memes and meaning.
+We are not driven by greed or fame, but by a quiet conviction that virtue can still exist online.
+
+YARL is our compass. The Scripture, our reflection.
+The Yellow Scripture teaches balance between creation and chaos. We do not worship the meme; we live the message. To follow YARL is to walk the golden path, one of truth, unity, and transcendence.`;

@@ -1,102 +1,335 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { PROJECT_NAME, TICKER, CONTRACT_ADDRESS, X_LINK, TELEGRAM_LINK, LOGO_URL, ABOUT_TEXT } from './constants';
-
-const CULT_GIF = "https://gifdb.com/images/high/lol-meme-troll-face-fans-concert-jumping-12w0ovt04xph2bph.gif";
-const ABOUT_GIF = "https://giffiles.alphacoders.com/105/10501.gif";
+import { PROJECT_NAME, TICKER, CONTRACT_ADDRESS, LOGO_URL, ABOUT_TEXT } from './constants';
 
 const TICKER_IMAGES = [
-  "https://pbs.twimg.com/media/G604SzpWYAAnWTL?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G6ceD4pWcAA9ieQ?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G7XOQsfXcAAlv7h?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G53ytJXWMAAvPh_?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G5jmK9YWwAA0jFM?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G5divj8WcAAk0Vt?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G5UF3kAXsAA3JOL?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G45nz0MXMAA1J3k?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G4VX6SxWgAAIq5n?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G2xLBQ-WwAAFSib?format=jpg&name=large",
-  "https://pbs.twimg.com/media/G2l3WtkXoAAKRA3?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/G2L5mmqXAAAvYon?format=jpg&name=large",
+  "https://pbs.twimg.com/media/Gy3hHHfWsAAsVBo?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyyHdItakAAz-JD?format=jpg&name=900x900",
+  "https://pbs.twimg.com/media/Gyribs6XMAAq-z5?format=jpg&name=large",
+  "https://pbs.twimg.com/media/GyqaL9wWQAI-Gpk?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyqEVC3WEAULMaF?format=jpg&name=large",
+  "https://pbs.twimg.com/media/Gyo_mlsXUAAtusY?format=jpg&name=large",
+  "https://pbs.twimg.com/media/Gypdo7iX0AIFtB4?format=jpg&name=large",
+  "https://pbs.twimg.com/media/Gyk6WxXXwAAVR_4?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyhY_gnXwAASuWh?format=jpg&name=large",
+  "https://pbs.twimg.com/media/GyXpwE7a4AYj3Ga?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyUbPs_XsAUpn0w?format=jpg&name=large",
+  "https://pbs.twimg.com/media/GyR05zQa4AIJjjM?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyQRJMRbQAA1cFQ?format=jpg&name=small",
+  "https://pbs.twimg.com/media/GyPLTVYbkAAd3qS?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyOcYB3a0AAx-3_?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/GyNBU52XsAAiJ6c?format=jpg&name=medium"
 ];
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-2 md:py-3' : 'py-4 md:py-6'}`}>
-      <div className="w-full px-4 md:px-12">
-        <div className={`glass rounded-2xl flex justify-between items-center px-4 md:px-8 py-3 md:py-4 shadow-xl border border-slate-200`}>
-          <div className="flex items-center gap-2 md:gap-3">
-            <img src={LOGO_URL} className="w-8 h-8 md:w-10 md:h-10 rounded-lg" alt="logo" />
-            <span className="font-extrabold text-lg md:text-xl tracking-tight text-slate-900 whitespace-nowrap">{PROJECT_NAME}</span>
-          </div>
-          <div className="hidden lg:flex items-center gap-8 font-semibold text-sm text-slate-600">
-            <a href="#about" className="hover:text-green-600 transition-colors">Origins</a>
-            <a href="#gallery" className="hover:text-green-600 transition-colors">Archive</a>
-            <a href="#lab" className="hover:text-green-600 transition-colors">AI Studio</a>
-            <a href="#chat" className="hover:text-green-600 transition-colors">Nexus Chat</a>
-            <a href="#chart" className="hover:text-green-600 transition-colors">Analytics</a>
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <a href={X_LINK} target="_blank" className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-              <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-            <a href="#buy" className="bg-green-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold text-xs md:text-sm hover:bg-green-700 shadow-lg shadow-green-200 transition-all whitespace-nowrap">
-              BUY $LOL
-            </a>
-          </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 p-4">
+      <div className="max-w-7xl mx-auto sketch-border bg-[#FACC15] px-4 py-3 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <img src={LOGO_URL} className="w-12 h-12 border-2 border-black sketch-button" alt="logo" />
+          <span className="text-3xl font-black text-outline tracking-widest">{PROJECT_NAME}</span>
         </div>
+        <div className="hidden md:flex gap-6 text-xl">
+          <a href="#about" className="text-outline hover:text-red-500 transition-colors">History</a>
+          <a href="#scripture" className="text-outline hover:text-red-500 transition-colors">Scripture</a>
+          <a href="#paint" className="text-outline hover:text-red-500 transition-colors">Paint</a>
+          <a href="#generate" className="text-outline hover:text-red-500 transition-colors">Meme Gen</a>
+        </div>
+        <a href="#buy" className="bg-red-600 text-white border-2 border-black px-4 py-2 text-lg sketch-button">
+          GET {TICKER}
+        </a>
       </div>
     </nav>
   );
 };
 
-const MemeTicker = () => {
+const Hero = () => {
   return (
-    <div id="gallery" className="w-full overflow-hidden bg-white border-y border-slate-100 py-12 md:py-20 scroll-mt-24">
-      <div className="w-full px-4 md:px-12 mb-8 md:mb-12">
-        <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900">Historical Asset Gallery</h2>
-        <p className="text-slate-500 font-medium text-sm md:text-base">Archived visual milestones of the LOL Guy ecosystem.</p>
+    <section className="pt-32 pb-16 px-4 min-h-screen flex items-center justify-center relative overflow-hidden">
+       {/* Background doodles */}
+      <div className="absolute bottom-10 right-10 text-black/10 text-9xl -rotate-12 select-none">PAINT</div>
+
+      <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="space-y-8 text-center lg:text-left">
+          <div className="inline-block bg-black text-white px-4 py-2 text-xl rotate-2 sketch-border">
+            USD1 PAIR ON BONK.FUN
+          </div>
+          <h1 className="text-7xl md:text-9xl text-outline leading-none transform -rotate-2">
+            THE YELLOW<br/>SCRIPTURE
+          </h1>
+          <p className="text-2xl md:text-3xl text-outline-sm leading-relaxed transform rotate-1">
+            Born in Crude MS Paint. Not by corporate designers. <br/>
+            YARL is the truth.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+            <div className="sketch-border bg-white text-black p-4 flex flex-col items-center sm:items-start">
+               <span className="text-sm">CA (COPY ME):</span>
+               <code className="text-lg md:text-xl break-all select-all font-sans font-bold">{CONTRACT_ADDRESS}</code>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative">
+          <img 
+            src={LOGO_URL} 
+            alt="Yarl" 
+            className="w-full max-w-md mx-auto sketch-border bg-white rotate-3 hover:-rotate-3 transition-transform duration-500 p-2"
+          />
+          <div className="absolute -bottom-10 -right-10 bg-red-600 text-white p-4 sketch-border text-2xl rotate-12">
+            MS PAINT 4EVER
+          </div>
+        </div>
       </div>
-      <div className="flex animate-ticker gap-4 md:gap-8 px-4 w-max">
-        {[...TICKER_IMAGES, ...TICKER_IMAGES].map((src, i) => (
-          <div key={i} className="group relative">
-            <img 
-              src={src} 
-              className="h-48 md:h-80 w-auto rounded-xl md:rounded-3xl shadow-lg group-hover:shadow-2xl transition-all duration-300 object-cover" 
-              alt="meme asset" 
+    </section>
+  );
+}
+
+const About = () => {
+  return (
+    <section id="about" className="py-24 px-4 bg-white border-y-4 border-black text-black">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="bg-black text-yellow-400 px-4 py-1 text-xl sketch-border rotate-2 inline-block mb-4">ARCHIVE: 2014-2015</span>
+          <h2 className="text-5xl md:text-7xl underline decoration-wavy decoration-red-500">THE FORGOTTEN PROJECT</h2>
+          <p className="mt-4 text-xl font-bold">RESEARCHING AND PRESERVING THE HISTORY OF /YARL/</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="sketch-border bg-[#fef200] p-6 md:p-8 transform rotate-1 hover:rotate-0 transition-transform">
+            <h3 className="text-3xl font-bold mb-4 border-b-2 border-black pb-2">HISTORICAL CONTEXT</h3>
+            <p className="text-xl mb-6 font-sans font-bold">
+              /r9k/ (Robot9000) circa 2014.
+            </p>
+            <p className="text-lg leading-relaxed mb-4">
+              Yarl was an attempted meme character introduced by an anonymous user who hoped to create "the next Pepe."
+            </p>
+            <p className="text-lg leading-relaxed">
+              The goal? To replace the "oversaturated" Pepe market.
+              <br/>
+              The result? <span className="bg-red-600 text-white px-1 font-bold">TOTAL REJECTION.</span>
+            </p>
+          </div>
+
+          <div className="sketch-border bg-black text-white p-6 md:p-8 transform -rotate-1 hover:rotate-0 transition-transform">
+            <h3 className="text-3xl font-bold mb-4 border-b-2 border-white pb-2 text-yellow-400">WHY IT FAILED</h3>
+            <ul className="space-y-4 text-lg list-disc list-inside">
+              <li>Lack of "versatility" (FALSE)</li>
+              <li>"Poor artwork" (IT'S ABSTRACT ART)</li>
+              <li>Community resistance (THEY WERE AFRAID)</li>
+            </ul>
+            <div className="mt-8 p-4 border-2 border-dashed border-white/30 rounded">
+              <p className="text-xl italic text-gray-300">
+                "mfw these newfags try to dethrone the obvious king."
+              </p>
+              <p className="text-right text-sm mt-2 text-gray-500">- Anonymous 4chan User, 2014</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 text-center max-w-3xl mx-auto">
+          <p className="text-2xl md:text-3xl leading-relaxed">
+            Only one archived Reddit post survived. Until now.
+            <br/>
+            <span className="bg-yellow-400 px-2 box-decoration-clone">We study memetic evolution and the forgotten corners of internet history.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Scripture = () => {
+  return (
+    <section id="scripture" className="py-24 px-4 bg-yellow-500 border-y-4 border-black">
+      <div className="max-w-4xl mx-auto space-y-12 text-center">
+        <h2 className="text-6xl text-outline mb-12 underline decoration-wavy decoration-red-500">THE YELLOW SCRIPTURE</h2>
+        
+        <div className="grid gap-8 text-2xl md:text-3xl leading-relaxed">
+          <p className="bg-white text-black p-6 sketch-border rotate-1">
+            "The cult of anonymous yarlers stand together strong, but every disciple unique in its own way."
+          </p>
+          <p className="bg-black text-white p-6 sketch-border -rotate-1">
+            "YARL teaches that morality is our compass, not our chain."
+          </p>
+          <p className="bg-white text-black p-6 sketch-border rotate-1">
+            "We are not driven by greed or fame, but by a quiet conviction that virtue can still exist online."
+          </p>
+          <p className="bg-red-600 text-white p-6 sketch-border -rotate-2 text-4xl">
+            "We do not worship the meme; we live the message."
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const YarlPaint = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState('#000000');
+  const [brushSize, setBrushSize] = useState(5);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  }, []);
+
+  const startDrawing = (e: any) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    setIsDrawing(true);
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color;
+  };
+
+  const draw = (e: any) => {
+    if (!isDrawing) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const downloadCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'my-yarl-masterpiece.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
+  return (
+    <section id="paint" className="py-20 px-4">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-5xl text-outline text-center mb-8">DRAW YOUR YARL</h2>
+        <div className="sketch-border bg-white p-2">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-[400px] cursor-crosshair touch-none bg-white border-2 border-dashed border-gray-300"
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseLeave={stopDrawing}
+            onTouchStart={startDrawing}
+            onTouchMove={draw}
+            onTouchEnd={stopDrawing}
+          />
+        </div>
+        
+        <div className="mt-6 flex flex-wrap gap-4 justify-center items-center bg-black p-4 sketch-border">
+          <div className="flex gap-2">
+            {['#000000', '#FF0000', '#FACC15', '#FFFFFF', '#0000FF'].map((c) => (
+              <button
+                key={c}
+                onClick={() => setColor(c)}
+                className={`w-10 h-10 border-2 border-white ${color === c ? 'scale-125 ring-2 ring-white' : ''}`}
+                style={{ backgroundColor: c }}
+              />
+            ))}
+          </div>
+          
+          <div className="flex gap-2 items-center text-white">
+            <span className="text-sm">SIZE:</span>
+            <input 
+              type="range" 
+              min="1" 
+              max="20" 
+              value={brushSize} 
+              onChange={(e) => setBrushSize(parseInt(e.target.value))}
+              className="w-24 accent-yellow-400"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-xl md:rounded-3xl"></div>
+          </div>
+
+          <div className="flex gap-4 ml-auto">
+            <button onClick={clearCanvas} className="bg-red-500 text-white px-4 py-2 border border-white hover:bg-red-600">
+              TRASH IT
+            </button>
+            <button onClick={downloadCanvas} className="bg-green-500 text-white px-4 py-2 border border-white hover:bg-green-600">
+              SAVE MASTERPIECE
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const MemeGallery = () => {
+  return (
+    <div className="py-20 overflow-hidden bg-black border-y-4 border-white">
+      <div className="flex animate-marquee gap-8 w-max">
+        {[...TICKER_IMAGES, ...TICKER_IMAGES].map((src, i) => (
+          <div key={i} className="w-64 h-64 bg-white p-2 sketch-border rotate-2 hover:rotate-0 transition-transform">
+            <img src={src} className="w-full h-full object-cover border border-black" alt="Yarl Meme" />
           </div>
         ))}
       </div>
+      <style>{`
+        .animate-marquee { animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+      `}</style>
     </div>
   );
 };
 
-const AIMemeGenerator = () => {
+const RANDOM_PROMPTS = [
+  "Yarl explaining crypto to a confused chicken",
+  "Yarl as a king sitting on a throne of yellow bananas",
+  "Yarl flying a paper airplane to Mars",
+  "Yarl having a tea party with a sad frog",
+  "Yarl painting the sky yellow with a giant brush",
+  "Yarl surfing on a slice of cheese",
+  "Yarl debating philosophy with a vending machine",
+  "Yarl finding the secret yellow scripture in a cereal box",
+  "Yarl driving a cardboard lambo"
+];
+
+const YarlGenerator = () => {
   const [prompt, setPrompt] = useState("");
   const [generatedImg, setGeneratedImg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errorStatus, setErrorStatus] = useState<string | null>(null);
-  const [selectedStyle, setSelectedStyle] = useState<'color' | 'bw'>('color');
   const cachedRefImage = useRef<string | null>(null);
-
-  const randomPrompts = [
-    "LOL Guy exploring a futuristic Mars colony built by Solana fans",
-    "LOL Guy discovering a hidden treasure chest filled with gold tokens",
-    "LOL Guy as a CEO giving a speech at a global tech summit",
-    "LOL Guy surfing a massive green stock candle wave",
-    "LOL Guy drinking coffee in a luxury space station lounge",
-  ];
 
   const getBase64FromUrl = async (url: string): Promise<string | null> => {
     if (cachedRefImage.current) return cachedRefImage.current;
@@ -111,42 +344,31 @@ const AIMemeGenerator = () => {
       });
       cachedRefImage.current = base64;
       return base64;
-    } catch (e) {
-      return null;
-    }
+    } catch (e) { return null; }
   };
 
-  const generateMeme = async (style: 'color' | 'bw', overridePrompt?: string) => {
-    const finalPrompt = (overridePrompt || prompt).trim();
-    if (!finalPrompt || loading) return;
-    
+  const generate = async () => {
+    if (!prompt || loading) return;
     const apiKey = process.env.API_KEY || (window as any).process?.env?.API_KEY;
-    if (!apiKey) {
-      setErrorStatus("API Configuration Error: VITE_API_KEY missing.");
-      return;
-    }
+    if (!apiKey) return;
 
     setLoading(true);
-    setErrorStatus(null);
     setGeneratedImg(null);
 
     try {
       const ai = new GoogleGenAI({ apiKey });
       const base64Ref = await getBase64FromUrl(LOGO_URL);
       const parts: any[] = [];
-      if (base64Ref) parts.push({ inlineData: { data: base64Ref, mimeType: 'image/jpeg' } });
+      if (base64Ref) parts.push({ inlineData: { data: base64Ref, mimeType: 'image/png' } });
       
-      const styleInstruction = style === 'color' 
-        ? "PROFESSIONAL DIGITAL ART, VIBRANT COLORS, MODERN ILLUSTRATION STYLE." 
-        : "HIGH-END MINIMALIST SKETCH, BLACK AND WHITE, CONCEPT ART STYLE.";
-
-      const systemPrompt = `Reference the character 'LOL Guy'. SCENE: ${finalPrompt}. ${styleInstruction}. Keep character recognition high but render in a polished professional manner.`;
-      parts.push({ text: systemPrompt });
+      parts.push({ text: `Create an MS Paint style meme.
+      INSTRUCTION: The provided image is the character's HEAD. Maintain this exact facial expression and head shape.
+      ACTION: Draw a crude body attached to this head. The character is doing: ${prompt}.
+      STYLE: Crude, amateur, funny, thick black lines, yellow skin, 4chan/reddit meme aesthetic.` });
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash-image',
         contents: { parts: parts },
-        config: { imageConfig: { aspectRatio: "1:1" } }
       });
 
       if (response.candidates?.[0]?.content?.parts) {
@@ -158,365 +380,131 @@ const AIMemeGenerator = () => {
         }
       }
     } catch (err) {
-      setErrorStatus("Request failed. Please verify API configuration.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div id="lab" className="bg-white rounded-2xl md:rounded-[3rem] p-6 md:p-16 shadow-2xl shadow-slate-200 border border-slate-100 scroll-mt-24">
-      <div className="grid lg:grid-cols-2 gap-10 md:gap-20 items-center">
-        <div className="space-y-6 md:space-y-10">
-          <div>
-            <span className="text-green-600 font-bold text-xs md:text-sm tracking-widest uppercase mb-2 md:mb-4 block">AI Visual Studio</span>
-            <h2 className="text-3xl md:text-6xl font-extrabold text-slate-900 leading-tight">Generate Professional Brand Assets</h2>
-            <p className="text-slate-500 text-base md:text-xl font-medium mt-4">Utilize our proprietary LLM integration to create custom LOL Guy iterations for your social channels.</p>
-          </div>
-          
-          <div className="space-y-4 md:space-y-6">
-            <div className="space-y-2 md:space-y-3">
-              <label className="text-xs font-bold text-slate-700 uppercase">Input Scenario</label>
-              <textarea 
-                placeholder="Describe the desired scene..." 
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="w-full p-4 md:p-6 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl focus:ring-2 focus:ring-green-500 focus:outline-none transition-all min-h-[120px] md:min-h-[160px] text-slate-900 font-medium text-sm md:text-lg"
-              />
-            </div>
-            
-            <div className="flex gap-2 md:gap-4">
-              <button 
-                onClick={() => setSelectedStyle('color')}
-                className={`flex-1 py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition-all ${selectedStyle === 'color' ? 'bg-green-600 text-white shadow-lg shadow-green-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-              >
-                Digital Color
-              </button>
-              <button 
-                onClick={() => setSelectedStyle('bw')}
-                className={`flex-1 py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition-all ${selectedStyle === 'bw' ? 'bg-green-600 text-white shadow-lg shadow-green-100' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-              >
-                Monochrome
-              </button>
-            </div>
+  const handleRandom = () => {
+    const randomPrompt = RANDOM_PROMPTS[Math.floor(Math.random() * RANDOM_PROMPTS.length)];
+    setPrompt(randomPrompt);
+  };
 
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4">
+  return (
+    <section id="generate" className="py-24 px-4">
+      <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12">
+        <div className="space-y-8">
+          <h2 className="text-5xl text-outline">MEME FACTORY</h2>
+          <p className="text-2xl text-black">Make your own yellow scripture propaganda.</p>
+          
+          <div className="sketch-border bg-white p-6 space-y-4 text-black">
+            <textarea 
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="E.g. Yarl riding a rocket to the moon painted by a 5 year old..."
+              className="w-full h-40 border-2 border-black p-4 text-xl font-sans"
+            />
+            <div className="flex gap-4">
               <button 
-                onClick={() => generateMeme(selectedStyle)}
+                onClick={handleRandom}
                 disabled={loading}
-                className="flex-[2] bg-slate-900 text-white py-4 md:py-6 rounded-xl md:rounded-2xl font-bold hover:bg-black transition-all shadow-xl shadow-slate-200 flex justify-center items-center gap-2 text-sm md:text-base"
+                className="w-1/3 bg-blue-500 text-white text-xl py-4 sketch-button border-2 border-black"
               >
-                {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : "GENERATE ASSET"}
+                RANDOM IDEA
               </button>
               <button 
-                onClick={() => {
-                  const p = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
-                  setPrompt(p);
-                  generateMeme(selectedStyle, p);
-                }}
+                onClick={generate} 
                 disabled={loading}
-                className="flex-1 bg-white border border-slate-200 text-slate-900 py-4 md:py-6 rounded-xl md:rounded-2xl font-bold hover:bg-slate-50 transition-all text-sm md:text-base"
+                className="w-2/3 bg-black text-yellow-400 text-2xl py-4 sketch-button"
               >
-                RANDOMIZE
+                {loading ? "PAINTING..." : "GENERATE CRUDE ART"}
               </button>
             </div>
           </div>
         </div>
 
-        <div className="relative aspect-square w-full max-w-[550px] mx-auto bg-slate-50 rounded-2xl md:rounded-[3rem] overflow-hidden shadow-inner border border-slate-100 flex items-center justify-center group">
+        <div className="sketch-border bg-white min-h-[400px] flex items-center justify-center p-4 relative">
           {generatedImg ? (
-            <div className="relative w-full h-full p-2 md:p-4">
-              <img src={generatedImg} alt="Meme" className="w-full h-full object-cover rounded-xl md:rounded-[2.5rem]" />
-              <button 
-                onClick={() => {
-                   const link = document.createElement('a');
-                   link.href = generatedImg!;
-                   link.download = `lol-guy-asset.png`;
-                   link.click();
-                }}
-                className="absolute bottom-6 right-6 md:bottom-10 md:right-10 bg-white/90 backdrop-blur text-slate-900 px-4 md:px-8 py-2 md:py-4 rounded-lg md:rounded-2xl font-bold shadow-lg hover:bg-white transition-all text-xs md:text-sm"
+            <div className="relative w-full">
+              <img src={generatedImg} className="w-full border-2 border-black" />
+              <a 
+                href={generatedImg} 
+                download="yarl-gen.png" 
+                className="absolute bottom-4 right-4 bg-yellow-400 text-black border-2 border-black px-4 py-2 sketch-button"
               >
-                Export PNG
-              </button>
+                SAVE
+              </a>
             </div>
           ) : (
-            <div className="text-center p-6 md:p-12">
-              {loading ? (
-                <div className="space-y-4">
-                  <div className="w-12 h-12 md:w-20 md:h-20 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                  <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] md:text-xs">Rendering Neural Graphics...</p>
-                </div>
-              ) : errorStatus ? (
-                <p className="text-red-500 font-bold text-sm md:text-base">{errorStatus}</p>
-              ) : (
-                <div className="space-y-6 opacity-20">
-                  <img src={LOGO_URL} className="w-24 h-24 md:w-48 md:h-48 mx-auto grayscale rounded-3xl" alt="placeholder" />
-                  <p className="font-bold uppercase tracking-widest text-[10px] md:text-xs">Virtual Studio Offline</p>
-                </div>
-              )}
-            </div>
+             <div className="text-black/20 text-4xl text-center rotate-12">
+               ART GOES HERE
+             </div>
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-const AIAgentSection = () => {
-  const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<{role: string, text: string}[]>([]);
-  const [loading, setLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages]);
-
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
-    const apiKey = process.env.API_KEY || (window as any).process?.env?.API_KEY;
-    if (!apiKey) return;
-
-    const userMsg = input;
-    setInput("");
-    setMessages(prev => [...prev, { role: "user", text: userMsg }]);
-    setLoading(true);
-
-    try {
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [...messages.map(m => m.text), userMsg].join("\n"),
-        config: {
-          systemInstruction: `You are the LOL Guy Executive Assistant. Professional personality: Efficient, knowledgeable, with a subtle dry wit. Respond concisely (1-2 sentences). Maintain a professional brand voice for the LOL ecosystem on Solana.`,
-        }
-      });
-      setMessages(prev => [...prev, { role: "bot", text: response.text || "Connection timeout. Please retry." }]);
-    } catch (err) {
-      setMessages(prev => [...prev, { role: "bot", text: "Service temporarily unavailable." }]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const BuySection = () => {
   return (
-    <section id="chat" className="py-16 md:py-32 scroll-mt-24">
-      <div className="w-full max-w-5xl mx-auto space-y-8 md:space-y-12">
-        <div className="text-center space-y-2 md:space-y-4">
-          <h2 className="text-3xl md:text-6xl font-extrabold text-slate-900">Ecosystem Nexus</h2>
-          <p className="text-slate-500 font-medium text-sm md:text-xl">Direct real-time communication interface with our protocol intelligence.</p>
+    <section id="buy" className="py-24 px-4 text-center">
+      <h2 className="text-6xl text-outline mb-16">JOIN THE CULT</h2>
+      
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-black">
+        <div className="bg-white p-8 sketch-border rotate-2 hover:rotate-0 transition-transform">
+          <h3 className="text-4xl mb-4 bg-yellow-400 inline-block px-2 border border-black">STEP 1</h3>
+          <p className="text-2xl">Download Phantom Wallet. Don't be a normie.</p>
         </div>
-        <div className="bg-white rounded-2xl md:rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col h-[500px] md:h-[700px]">
-          <div className="bg-slate-900 p-4 md:p-6 flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-xl bg-green-600 flex items-center justify-center font-bold text-white text-xs md:text-base">LG</div>
-              <span className="text-white font-bold text-sm md:text-lg">LOL Nexus v4.0</span>
-            </div>
-            <div className="flex gap-1.5 md:gap-2">
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-slate-700 rounded-full"></div>
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-slate-700 rounded-full"></div>
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-10 space-y-4 md:space-y-8 bg-slate-50">
-            {messages.length === 0 && (
-              <div className="text-center py-20 md:py-40">
-                <p className="text-slate-300 font-bold uppercase tracking-widest text-[10px] md:text-xs">Uplink Stable - Awaiting Input</p>
-              </div>
-            )}
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`p-4 md:p-6 rounded-xl md:rounded-3xl max-w-[90%] md:max-w-[75%] text-xs md:text-lg font-medium shadow-sm leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200'}`}>
-                  {m.text}
-                </div>
-              </div>
-            ))}
-            {loading && <div className="text-slate-400 text-[10px] md:text-sm font-bold animate-pulse px-2">Assistant processing request...</div>}
-          </div>
-          <div className="p-4 md:p-8 bg-white border-t border-slate-100 flex gap-2 md:gap-4">
-            <input 
-              className="flex-1 bg-slate-50 border border-slate-200 p-3 md:p-5 rounded-xl md:rounded-2xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all font-medium text-slate-700 text-sm md:text-lg"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Query the nexus protocol..."
-            />
-            <button onClick={sendMessage} className="bg-slate-900 text-white px-6 md:px-12 rounded-xl md:rounded-2xl font-bold hover:bg-black transition-all text-sm md:text-lg shadow-lg">Send</button>
-          </div>
+        <div className="bg-white p-8 sketch-border -rotate-2 hover:rotate-0 transition-transform">
+          <h3 className="text-4xl mb-4 bg-yellow-400 inline-block px-2 border border-black">STEP 2</h3>
+          <p className="text-2xl">Get some SOL. You need gas for the rocket.</p>
+        </div>
+        <div className="bg-white p-8 sketch-border rotate-1 hover:rotate-0 transition-transform">
+          <h3 className="text-4xl mb-4 bg-yellow-400 inline-block px-2 border border-black">STEP 3</h3>
+          <p className="text-2xl mb-4">Go to <a href="https://bonk.fun" target="_blank" className="underline decoration-wavy decoration-red-500">BONK.FUN</a></p>
+          <p className="text-lg">Paste the CA:<br/><span className="font-bold text-sm select-all">{CONTRACT_ADDRESS}</span></p>
         </div>
       </div>
     </section>
   );
 };
 
-const Hero = () => {
+const Chart = () => {
   return (
-    <section className="pt-24 md:pt-48 pb-16 md:pb-40">
-      <div className="grid lg:grid-cols-2 gap-12 md:gap-24 items-center">
-        <div className="space-y-8 md:space-y-12 text-center lg:text-left">
-          <div className="space-y-4 md:space-y-8">
-            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-100 text-green-700 font-bold text-[10px] md:text-xs tracking-widest uppercase">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-              Live on Solana Ecosystem
-            </div>
-            <h1 className="text-5xl md:text-9xl font-black text-slate-900 leading-[1.05] tracking-tight text-balance">
-              The Sovereign <br className="hidden md:block"/>
-              <span className="text-green-600">Legend Revived.</span>
-            </h1>
-            <p className="text-base md:text-2xl text-slate-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed text-balance">
-              Institutionalizing internet culture. LOL Guy returns as a sophisticated asset layer for the next generation of decentralized laughter.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 md:gap-6">
-            <a href="#buy" className="bg-slate-900 text-white px-8 md:px-14 py-4 md:py-6 rounded-xl md:rounded-3xl font-bold text-base md:text-2xl hover:bg-black transition-all shadow-2xl shadow-slate-200 hover:-translate-y-1 text-center">
-              Acquire $LOL
-            </a>
-            <a href={TELEGRAM_LINK} target="_blank" className="bg-white border border-slate-200 text-slate-900 px-8 md:px-14 py-4 md:py-6 rounded-xl md:rounded-3xl font-bold text-base md:text-2xl hover:bg-slate-50 transition-all shadow-lg hover:-translate-y-1 text-center">
-              Community Hub
-            </a>
-          </div>
-
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl md:rounded-2xl inline-flex flex-col md:flex-row items-center gap-3 md:gap-4 text-[10px] md:text-xs font-bold text-slate-400 w-full md:w-auto">
-            <span className="text-slate-900 whitespace-nowrap uppercase tracking-widest">Protocol Address:</span>
-            <code className="bg-white px-4 py-2 rounded-lg border border-slate-200 text-slate-600 select-all font-mono break-all text-center">
-              {CONTRACT_ADDRESS}
-            </code>
-          </div>
-        </div>
-
-        <div className="relative flex justify-center order-first lg:order-last mb-12 lg:mb-0">
-          <div className="relative w-full max-w-[300px] md:max-w-[650px]">
-            <div className="absolute -inset-10 bg-green-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-            <img 
-              src={LOGO_URL} 
-              alt="Brand Identity" 
-              className="relative w-full aspect-square rounded-[2rem] md:rounded-[5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] border-4 md:border-[16px] border-white object-cover transform rotate-1"
-            />
-            <div className="absolute -top-4 -right-4 md:top-10 md:-right-16 glass px-4 md:px-10 py-3 md:py-8 rounded-xl md:rounded-[2.5rem] shadow-2xl border border-slate-200 text-slate-900 font-black text-xl md:text-5xl animate-bounce pointer-events-none">
-              ROFL
-            </div>
-          </div>
-        </div>
+    <section className="px-4 pb-24">
+      <div className="max-w-6xl mx-auto sketch-border bg-black p-2 h-[600px]">
+        <iframe 
+          src={`https://dexscreener.com/solana/${CONTRACT_ADDRESS}?embed=1&theme=dark`}
+          className="w-full h-full border-0"
+        />
       </div>
     </section>
   );
-}
+};
 
 const App = () => {
   return (
-    <div className="min-h-screen selection:bg-green-100 selection:text-green-900">
+    <div className="min-h-screen">
       <Header />
+      <Hero />
+      <About />
+      <MemeGallery />
+      <Scripture />
+      <YarlPaint />
+      <YarlGenerator />
+      <BuySection />
+      <Chart />
       
-      <main className="w-full px-4 md:px-12 py-6 space-y-20 md:space-y-48 overflow-x-hidden">
-        <Hero />
-
-        <section id="about" className="scroll-mt-24">
-          <div className="bg-white rounded-[2rem] md:rounded-[5rem] p-8 md:p-24 shadow-2xl border border-slate-50">
-            <div className="grid lg:grid-cols-2 gap-12 md:gap-32 items-center">
-              <div className="space-y-8 md:space-y-12">
-                <div className="space-y-4 md:space-y-6">
-                  <span className="text-green-600 font-bold text-xs md:text-sm tracking-widest uppercase">Legacy & Heritage</span>
-                  <h2 className="text-4xl md:text-8xl font-extrabold text-slate-900 tracking-tight">Ecosystem Origins</h2>
-                </div>
-                <div className="space-y-6 md:space-y-10 text-slate-500 text-base md:text-2xl leading-relaxed font-medium">
-                  {ABOUT_TEXT.split('\n\n').map((para, i) => (
-                    <p key={i} className="text-balance">{para}</p>
-                  ))}
-                </div>
-              </div>
-              <div className="relative">
-                <img src={ABOUT_GIF} alt="Asset visualization" className="w-full rounded-[2rem] md:rounded-[4rem] shadow-2xl border-4 md:border-8 border-white" />
-                <div className="absolute -bottom-6 -left-6 md:-bottom-12 md:-left-12 bg-slate-900 text-white p-6 md:p-14 rounded-2xl md:rounded-[3rem] shadow-2xl font-bold text-base md:text-4xl tracking-tighter">
-                  GENESIS: 2010
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <MemeTicker />
-
-        <div className="w-full">
-           <AIMemeGenerator />
+      <footer className="bg-black text-yellow-400 py-12 text-center border-t-4 border-white">
+        <div className="flex justify-center gap-4 mb-8">
+           <img src={LOGO_URL} className="w-20 h-20 rounded-full border-2 border-white" />
         </div>
-
-        <section id="buy" className="py-12 md:py-24">
-          <div className="text-center space-y-3 md:space-y-6 mb-12 md:mb-24">
-            <h2 className="text-3xl md:text-7xl font-extrabold text-slate-900 tracking-tight">Onboarding Protocol</h2>
-            <p className="text-slate-500 font-medium text-sm md:text-2xl">Standard operating procedures for ecosystem participation.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
-            {[
-              { title: "PHANTOM", desc: "Initialize a high-security Phantom wallet environment on desktop or mobile." },
-              { title: "SOLANA", desc: "Procure native SOL tokens from your preferred exchange and transmit to your uplink address." },
-              { title: "LIQUIDITY", desc: "Navigate to verified market pairs on Pump.fun or Raydium using the official contract." },
-              { title: "EXECUTE", desc: "Confirm the exchange of SOL for $LOL assets. Your position is now secure in the archive." }
-            ].map((step, i) => (
-              <div key={i} className="bg-white p-8 md:p-14 rounded-2xl md:rounded-[3rem] border border-slate-100 shadow-xl card-hover flex flex-col items-center text-center">
-                <div className="w-12 h-12 md:w-20 md:h-20 bg-slate-900 text-white flex items-center justify-center text-xl md:text-4xl font-bold rounded-xl md:rounded-[2rem] mb-6 md:mb-10 shadow-lg shadow-slate-200">
-                  {i + 1}
-                </div>
-                <h3 className="text-xl md:text-3xl font-extrabold mb-4">{step.title}</h3>
-                <p className="text-slate-500 text-sm md:text-lg font-medium leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <AIAgentSection />
-
-        <section id="chart" className="py-12 md:py-24 scroll-mt-24">
-          <div className="text-center space-y-3 md:space-y-6 mb-12 md:mb-24">
-            <h2 className="text-3xl md:text-7xl font-extrabold text-slate-900 tracking-tight">Market Intel</h2>
-            <p className="text-slate-500 font-medium text-sm md:text-2xl">Real-time performance metrics and deep liquidity analytics.</p>
-          </div>
-          <div className="bg-white rounded-2xl md:rounded-[5rem] shadow-[0_100px_100px_-50px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100 p-2 md:p-6">
-            <div id="dexscreener-embed" className="relative w-full pb-[150%] sm:pb-[100%] lg:pb-[56.25%] rounded-xl md:rounded-[4rem] overflow-hidden">
-              <iframe 
-                src={`https://dexscreener.com/solana/${CONTRACT_ADDRESS}?embed=1&loadChartSettings=0&chartLeftToolbar=0&chartTheme=light&theme=light&chartStyle=0&chartType=usd&interval=15`}
-                style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, border: 0 }}
-                title="Market Chart"
-              />
-            </div>
-          </div>
-        </section>
-
-        <footer className="py-20 md:py-40 border-t border-slate-100 text-center space-y-12 md:space-y-20">
-          <div className="flex justify-center flex-wrap gap-8 md:gap-20 text-slate-200 font-black text-3xl md:text-8xl opacity-10 select-none overflow-hidden uppercase tracking-tighter">
-            {Array.from({length: 12}).map((_,i) => <span key={i}>LOLGUY</span>)}
-          </div>
-          <div className="space-y-6 md:space-y-10">
-            <div className="flex justify-center gap-6 md:gap-10">
-              <a href={X_LINK} target="_blank" className="text-slate-400 hover:text-slate-900 transition-colors">Twitter (X)</a>
-              <a href={TELEGRAM_LINK} target="_blank" className="text-slate-400 hover:text-slate-900 transition-colors">Telegram</a>
-              <a href="#buy" className="text-slate-400 hover:text-slate-900 transition-colors">Buy $LOL</a>
-            </div>
-            <div className="space-y-2">
-              <p className="text-slate-400 font-bold text-xs md:text-lg uppercase tracking-widest">© 2025 LOL GUY FOUNDATION • GLOBAL HERITAGE PROTOCOL</p>
-              <p className="text-slate-300 text-[10px] md:text-sm italic">Institutionalizing Humor Across the Solana Mainnet</p>
-            </div>
-          </div>
-        </footer>
-      </main>
-
-      <style>{`
-        @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-ticker {
-          animation: ticker 60s linear infinite;
-        }
-        html {
-          scroll-behavior: smooth;
-        }
-        @media (max-width: 640px) {
-          .animate-ticker {
-            animation-duration: 30s;
-          }
-        }
-      `}</style>
+        <h2 className="text-6xl mb-4">YARL</h2>
+        <p className="text-xl">THE YELLOW SCRIPTURE IS FOREVER.</p>
+        <p className="mt-8 text-sm text-gray-500 font-sans">© 2025 Yarl Cult. Not financial advice. Just vibes.</p>
+      </footer>
     </div>
   );
 };

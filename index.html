@@ -4,52 +4,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOL Guy | Professional Ecosystem</title>
-    <link rel="icon" type="image/jpeg" href="https://pbs.twimg.com/profile_images/1968362464698839040/40F6gXh__400x400.jpg">
+    <title>YARL | The Yellow Scripture</title>
+    <link rel="icon" type="image/png" href="https://yarl.fun/assets/image_1754937653085-Dlh4_m6V.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
       body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8fafc;
-        color: #0f172a;
+        font-family: 'Permanent Marker', cursive;
+        background-color: #fef200; /* Updated Yellow */
+        color: #FFFFFF;
         overflow-x: hidden;
       }
-      .glass {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+
+      /* Text outline to make white text readable on yellow */
+      .text-outline {
+        text-shadow: 
+          -2px -2px 0 #000,  
+           2px -2px 0 #000,
+          -2px  2px 0 #000,
+           2px  2px 0 #000;
       }
-      .gradient-text {
-        background: linear-gradient(135deg, #0f172a 0%, #16a34a 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+      
+      .text-outline-sm {
+        text-shadow: 
+          -1px -1px 0 #000,  
+           1px -1px 0 #000,
+          -1px  1px 0 #000,
+           1px  1px 0 #000;
       }
+
+      .sketch-border {
+        border: 3px solid #000;
+        border-radius: 2px 255px 3px 25px / 255px 5px 225px 3px;
+        box-shadow: 5px 5px 0px 0px #000;
+      }
+      
+      .sketch-button {
+        transition: all 0.2s ease-in-out;
+      }
+      .sketch-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 7px 7px 0px 0px #000;
+      }
+      .sketch-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px 0px #000;
+      }
+
+      /* Custom Scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 12px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f5f9;
+        background: #fef200; /* Updated Yellow */
+        border-left: 2px solid black;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
+        background: #FFFFFF;
+        border: 2px solid black;
+        border-radius: 0;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+        background: #e2e8f0;
       }
+
       * {
-        font-family: 'Inter', sans-serif !important;
-      }
-      .card-hover {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        font-family: 'Permanent Marker', cursive !important;
       }
     </style>
   <script type="importmap">
